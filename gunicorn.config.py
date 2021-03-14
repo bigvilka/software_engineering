@@ -1,0 +1,9 @@
+bind = '0.0.0.0:5000'
+workers = 1
+threads = 1
+timeout = 60
+logger_class = 'utils.glogger.GunicornLogger'
+loglevel = 'info'
+accesslog = 'logs/access.log'
+errorlog = 'logs/errors.log'
+reload = True

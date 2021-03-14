@@ -1,0 +1,38 @@
+swagger: "2.0"
+info:
+  description: "Модуль представляет из себя *API* приложение на *python3.6.0*"
+  version: "1.0.0"
+  title: "Модуль API проекта Программная инженерия"
+servers:
+- url: http://localhost:5000
+tags:
+- name: "Добавление заметки"
+  description: "Принимает параметры от клиента для создания заметки"
+paths:
+  /notes:
+    post:
+      tags:
+      - "Добавление заметки"
+      summary: "Добавляет заметки"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Пример запроса"
+        required: true
+        schema:
+          $ref: "#/definitions/create"
+      responses:
+        204:
+          description: "Пустое содержимое"
+        201:
+          description: OK
+  
+definitions:
+  create:
+    type: "object"
+    required:
+    - "content"
+    properties:
+      content:
+        type: string
+        example: "Выкинуть мусор, решить программную инженерию"
