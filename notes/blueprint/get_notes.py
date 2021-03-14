@@ -10,25 +10,30 @@ get_notes = Blueprint('get_notes', __name__)
 def get_query():
     query = request.args.get('query')
     if query:
-        note = Note.objects(title__icontains=query).first()
-        if note:
-            if not note.title:
-                note.title = note.content[:Config.COUNT_OF_FIRST_N_LETTERS]
-            return jsonify({
-                'id': note.id,
-                'title': note.title,
-                'content': note.content
-            })
-        note = Note.objects(content__icontains=query).first()
-        if note:
-            if not note.title:
-                note.title = note.content[:Config.COUNT_OF_FIRST_N_LETTERS]
-            return jsonify({
-                'id': note.id,
-                'title': note.title,
-                'content': note.content
-            })
-        if not note:
+        result = []
+        notes = Note.objects(title__icontains=query)
+        for note in notes:
+            if note:
+                if not note.title:
+                    note.title = note.content[:Config.COUNT_OF_FIRST_N_LETTERS]
+                result.append({
+                    'id': note.id,
+                    'title': note.title,
+                    'content': note.content
+                })
+        notes = Note.objects(content__icontains=query)
+        for note in notes:
+            if note:
+                if not note.title:
+                    note.title = note.content[:Config.COUNT_OF_FIRST_N_LETTERS]
+                result.append({
+                    'id': note.id,
+                    'title': note.title,
+                    'content': note.content
+                })
+        if result:
+            return jsonify(result)
+        else:
             return "", 400
     else:
         notes = Note.objects
