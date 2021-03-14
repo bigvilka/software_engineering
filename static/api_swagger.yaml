@@ -1,3 +1,5 @@
+#ссылка на github: https://github.com/bigvilka/software_engineering
+
 swagger: "2.0"
 info:
   description: "Модуль представляет из себя *API* приложение на *python3.6.0*"
@@ -8,6 +10,14 @@ servers:
 tags:
 - name: "Добавление заметки"
   description: "Принимает параметры от клиента для создания заметки"
+- name: "Удаление заметки"
+  description: "Удаляет заметку по номеру"
+- name: "Получение заметки по ее идентификатору"
+  description: "Возвращает заметку с определенным номером"
+- name: "Редактирование заметки по ее идентификатору"
+  description: "Обновляет содержимое заметки по ее номеру"
+- name: "Получение заметок по запросу"
+  description: "Возвращает заметки, в которых есть указанная подстрока"
 paths:
   /notes:
     post:
@@ -26,7 +36,71 @@ paths:
           description: "Пустое содержимое"
         201:
           description: OK
-  
+    get:
+      tags:
+      - "Получение заметок по запросу"
+      summary: "Возвращает все заметки с указанным вхождением"
+      parameters:
+      - in: query
+        name: query
+        description: "Пример запроса"
+        required: true
+        schema:
+          $ref: "#/definitions/query"
+      responses:
+        200:
+          description: OK
+        400:
+          description: "Не найдены заметки с таким запросом"
+  /notes/{id}:
+    delete:
+      tags:
+      - "Удаление заметки"
+      summary: "Удаляет заметку"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "Номер заметки"
+        type: integer
+        default: "1"
+        required: true
+      responses:
+        400:
+          description: "Не найдена заметка с таким номером"
+        200:
+          description: OK
+    get:
+      tags:
+      - "Получение заметки по ее идентификатору"
+      summary: "Возвращает заметку с определенным номером"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "Номер заметки"
+        type: integer
+        default: "1"
+        required: true
+      responses:
+        200:
+          description: OK
+    put:
+      tags:
+      - "Редактирование заметки по ее идентификатору"
+      summary: "Обновляет поля заметки с определенным номером"
+      parameters:
+      - in: "path"
+        name: "id"
+        description: "Номер заметки"
+        type: integer
+        default: "1"
+        required: true
+      responses:
+        400:
+          description: "Не найдена заметка с таким номером"
+        202:
+          description: Содержимое обновлено
+        204:
+          description: "Пустое содержимое"
 definitions:
   create:
     type: "object"
@@ -36,3 +110,6 @@ definitions:
       content:
         type: string
         example: "Выкинуть мусор, решить программную инженерию"
+  query:
+    type: string
+    enum: ["решить"]
